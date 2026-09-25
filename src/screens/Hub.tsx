@@ -8,6 +8,7 @@ import { SAFETY_CHECKS } from "../content/checks";
 import { readinessLabel, siteReadiness } from "../content/mastery";
 import { tradeHint, tradeTitle, TRADES, type Trade } from "../content/trades";
 import { Avatar } from "../components/Avatar";
+import { CrewSite } from "../components/CrewSite";
 import { ExitBar } from "../components/ExitBar";
 import { Feedback } from "../components/activities";
 import { SourceList } from "../components/ModulePlayer";
@@ -46,6 +47,9 @@ export function GamesPage() {
     <div className="stack">
       <p className="kicker">Play</p>
       <h2>Games</h2>
+      <div className="yard-banner">
+        <CrewSite />
+      </div>
       <p>
         Each card is one activity. Press Play and you are in it. You do not have to finish the lesson first, and finishing a game here does not certify you for the job.
       </p>
@@ -154,6 +158,9 @@ export function Dashboard() {
       <p className="kicker">Construction Academy</p>
       <h2>Day {day}</h2>
       <p>Your first shift starts at 08:00.</p>
+      <div className="yard-banner">
+        <CrewSite />
+      </div>
       <div className="academy-head">
         <Avatar equipped={state.equipped} />
         <div className="stack">

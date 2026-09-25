@@ -67,7 +67,9 @@ export function Shell() {
             <WorksiteLoad />
           </div>
         ) : (
-          <Outlet />
+          <div key={shownPath} className="page-in">
+            <Outlet />
+          </div>
         )}
       </main>
       <nav className="bottom-nav" aria-label="Primary">

@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-route
 import { Shell } from "./components/Shell";
 import { ModulePlayer } from "./components/ModulePlayer";
 import { HowItWorks, LoadingScreen, OnboardingScreen, SettingsScreen, TitleScreen } from "./screens/Gate";
+import { SoundToggle } from "./components/SoundToggle";
 import { AdminScreen, SignInScreen } from "./screens/Admin";
 import { BadgesPage, BossPage, Dashboard, GamesPage, Missions, Profile, ProgressPage, Resources, TrainingMap } from "./screens/Hub";
 import { RecordPage } from "./screens/Record";
@@ -67,6 +68,7 @@ export function App() {
   const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
   return (
     <BrowserRouter basename={basename}>
+      <SoundToggle />
       <Entry />
     </BrowserRouter>
   );

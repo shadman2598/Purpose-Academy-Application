@@ -45,6 +45,8 @@ export interface ReviewSave {
 export interface Settings {
   textScale: "default" | "large";
   reducedMotion: boolean;
+  /** Quiet original site score. Missing on older saves means on. */
+  sound?: boolean;
 }
 
 export interface SaveState {
@@ -63,7 +65,7 @@ export interface SaveState {
   reviews: Record<string, ReviewSave>;
 }
 
-const defaultSettings: Settings = { textScale: "default", reducedMotion: false };
+const defaultSettings: Settings = { textScale: "default", reducedMotion: false, sound: true };
 
 export const emptySave = (): SaveState => ({
   version: 1,

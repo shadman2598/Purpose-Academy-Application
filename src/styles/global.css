@@ -134,6 +134,41 @@ p { margin: 0; }
     var(--bg);
 }
 .boot { display: grid; place-items: center; text-align: center; padding: 24px; }
+.title-screen { background-size: 160% 160%; animation: sky-drift 22s ease-in-out infinite; }
+.page-in { animation: page-in 0.45s ease; }
+.yard-banner {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-raise);
+}
+.yard-banner .crew-site { width: 100%; }
+.dust { transform-box: fill-box; transform-origin: center; animation: dust-drift 9s ease-in-out infinite; }
+.sound-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 20px;
+  z-index: 30;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 8px 14px;
+}
+.sound-toggle.on { border-color: var(--amber); }
+@keyframes sky-drift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 80% 30%; }
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dust-drift {
+  0%, 100% { transform: translate(0, 0); opacity: 0.35; }
+  50% { transform: translate(18px, -14px); opacity: 0.8; }
+}
 .worksite-load { align-items: center; text-align: center; width: min(760px, 100%); }
 .worksite-hold {
   min-height: calc(100vh - 32px);
@@ -516,6 +551,7 @@ textarea { min-height: 72px; resize: vertical; }
   .sidebar { display: none; }
   .bottom-nav { display: flex; }
   .content { padding-bottom: 108px; }
+  .sound-toggle { bottom: 84px; }
   .title-grid, .grid-2, .grid-3, .sds, .tower, .sim-lab { grid-template-columns: 1fr; }
   .title-grid { height: auto; }
   .hero-art { height: auto; min-height: 280px; border-left: 0; border-top: 1px solid var(--line); }

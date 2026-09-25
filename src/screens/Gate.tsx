@@ -6,6 +6,7 @@ import { XP_ROWS } from "../content/framework";
 import type { JurisdictionCode, Role } from "../content/model";
 import { useProgress } from "../state/progress";
 import { CrewSite } from "../components/CrewSite";
+import { startYardSound, stopYardSound } from "../lib/sound";
 
 export function WorksiteLoad() {
   const [line, setLine] = useState(0);
@@ -67,6 +68,12 @@ function HeroArt() {
         <rect width="720" height="640" fill="var(--bg)" />
         <g className="live-sun">
           <circle cx="120" cy="86" r="42" fill="var(--amber)" />
+        </g>
+        <g className="dust" fill="var(--concrete)">
+          <circle cx="200" cy="120" r="2" />
+          <circle cx="340" cy="90" r="1.5" />
+          <circle cx="480" cy="140" r="2" />
+          <circle cx="90" cy="200" r="1.4" />
         </g>
         <rect y="430" width="720" height="210" fill="var(--earth-deep)" />
         <rect x="70" y="168" width="250" height="262" fill="var(--panel-2)" />
@@ -144,6 +151,7 @@ export function TitleScreen({ onEnter }: { onEnter: () => void }) {
   const navigate = useNavigate();
   const hasProgress = state.onboarded;
   function enter(path: string) {
+    if (state.settings.sound !== false) startYardSound();
     onEnter();
     navigate(path);
   }
@@ -383,6 +391,18 @@ export function SettingsScreen({ embedded = false }: { embedded?: boolean }) {
           onChange={(event) => updateSettings({ reducedMotion: event.target.checked })}
         />
         Reduce motion
+      </label>
+      <label className="row">
+        <input
+          type="checkbox"
+          checked={state.settings.sound !== false}
+          onChange={(event) => {
+            updateSettings({ sound: event.target.checked });
+            if (event.target.checked) startYardSound();
+            else stopYardSound();
+          }}
+        />
+        Site sound
       </label>
       <button
         type="button"
