@@ -6,6 +6,7 @@ import { XP_ROWS } from "../content/framework";
 import type { JurisdictionCode, Role } from "../content/model";
 import { useProgress } from "../state/progress";
 import { CrewSite } from "../components/CrewSite";
+import { TeachText } from "../components/Parable";
 import { startYardSound, stopYardSound } from "../lib/sound";
 
 export function WorksiteLoad() {
@@ -335,13 +336,19 @@ export function HowItWorks() {
           {PHASES.map((phase) => (
             <div key={phase.id} className="panel">
               <h3>{phase.label}</h3>
-              <p className="muted">
-                {phase.id === "learn" && "Short teaching: symbols, rules of thumb, and the limit of the screen."}
-                {phase.id === "practice" && "A small rep before the game, so the first click is not the final exam."}
-                {phase.id === "play" && "The module’s own game: a yard, a locker, a label, a conversation."}
-                {phase.id === "test" && "A knowledge check and a final challenge. First answers are the ones that count."}
-                {phase.id === "master" && "Results, mistakes, sources, and a badge when the path earns one."}
-              </p>
+              <TeachText
+                text={
+                  phase.id === "learn"
+                    ? "Short teaching: symbols, rules of thumb, and the limit of the screen."
+                    : phase.id === "practice"
+                      ? "A small rep before the game, so the first click is not the final exam."
+                      : phase.id === "play"
+                        ? "The module’s own game: a yard, a locker, a label, a conversation."
+                        : phase.id === "test"
+                          ? "A knowledge check and a final challenge. First answers are the ones that count."
+                          : "Results, mistakes, sources, and a badge when the path earns one."
+                }
+              />
             </div>
           ))}
         </div>
@@ -352,7 +359,7 @@ export function HowItWorks() {
               {item.title}
               {item.inThisApp ? " · this app" : " · not issued here"}
             </strong>
-            <p>{item.body}</p>
+            <TeachText text={item.body} />
           </div>
         ))}
         <h3>Points</h3>

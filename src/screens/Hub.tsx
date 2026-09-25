@@ -10,6 +10,7 @@ import { tradeHint, tradeTitle, TRADES, type Trade } from "../content/trades";
 import { Avatar } from "../components/Avatar";
 import { CrewSite } from "../components/CrewSite";
 import { ExitBar } from "../components/ExitBar";
+import { TeachText } from "../components/Parable";
 import { Feedback } from "../components/activities";
 import { SourceList } from "../components/ModulePlayer";
 import {
@@ -50,9 +51,7 @@ export function GamesPage() {
       <div className="yard-banner">
         <CrewSite />
       </div>
-      <p>
-        Each card is one activity. Press Play and you are in it. You do not have to finish the lesson first, and finishing a game here does not certify you for the job.
-      </p>
+      <TeachText text="Each card is one activity. Press Play and you are in it. You do not have to finish the lesson first, and finishing a game here does not certify you for the job." />
       {modules.map((module) => {
         const items = games.filter((game) => game.moduleId === module.id);
         if (!items.length) return null;
@@ -64,7 +63,7 @@ export function GamesPage() {
                 <article key={game.blockId} className="panel stack">
                   <p className="kicker">{game.kind}</p>
                   <h3>{game.name}</h3>
-                  <p>{game.how}</p>
+                  <TeachText text={game.how} />
                   <Link className="btn btn-primary" to={game.href}>
                     Play
                   </Link>
@@ -93,10 +92,10 @@ export function BossPage() {
     <div className="stack">
       <p className="kicker">Boss level · {index + 1} of {boss.steps.length}</p>
       <h2>{boss.title}</h2>
-      <p>{boss.detail}</p>
+      <TeachText text={boss.detail} />
       <article className="panel stack">
         <p className="kicker">{step.speaker}</p>
-        <p>{step.prompt}</p>
+        <TeachText text={step.prompt} />
         {step.options.map((item) => (
           <button
             key={item.id}
@@ -177,7 +176,7 @@ export function Dashboard() {
       </div>
       <blockquote className="speech">
         <p className="kicker">{homeLine.speaker} · {PROJECT.name}</p>
-        <p>{homeLine.text}</p>
+        <TeachText text={homeLine.text} />
       </blockquote>
       {due && (
         <article className="panel stack">
@@ -218,7 +217,7 @@ export function Dashboard() {
         {BOSSES.map((boss) => (
           <article key={boss.id} className="panel stack">
             <h3>{boss.title}</h3>
-            <p>{boss.detail}</p>
+            <TeachText text={boss.detail} />
             <Link className="btn btn-primary" to={`/boss/${boss.id}`}>
               Start
             </Link>
@@ -251,15 +250,13 @@ export function TrainingMap() {
   return (
     <div className="stack">
       <h2>Training map</h2>
-      <p>
-        Top to bottom is the suggested order: learn the yard, then the gear, then the hazards. Every stop is open. Play the game, or start with the lesson.
-      </p>
+      <TeachText text="Top to bottom is the suggested order: learn the yard, then the gear, then the hazards. Every stop is open. Play the game, or start with the lesson." />
       <div className="path">
         {SHIFTS.map((shift) => (
           <div key={shift.number} className="panel">
             <p className="kicker">Shift {shift.number}</p>
             <h3>{shift.title}</h3>
-            <p>{shift.summary}</p>
+            <TeachText text={shift.summary} />
           </div>
         ))}
         {modules.map((module, index) => {
@@ -275,7 +272,7 @@ export function TrainingMap() {
               <div className="panel path-card stack">
                 <p className="kicker">{shiftFor(module.id) ? `Shift ${shiftFor(module.id)?.number}` : "Added module"}</p>
                 <h3>{module.title}</h3>
-                <p>{module.description}</p>
+                <TeachText text={module.description} />
                 <p className="muted">
                   {module.estimatedMinutes} minutes · {module.difficulty} · +{module.completionXp} XP · {modulePercent(module.id, state.modules[module.id])}%
                   {game ? ` · Game: ${game.name}` : ""}
@@ -350,7 +347,7 @@ export function BadgesPage() {
         {BADGES.map((badge) => (
           <article key={badge.id} className={earned.has(badge.id) ? "panel badge-card" : "panel badge-card locked"}>
             <h3>{badge.name}</h3>
-            <p>{badge.detail}</p>
+            <TeachText text={badge.detail} />
             <p className="muted">{earned.has(badge.id) ? "Earned on this device." : badge.how}</p>
           </article>
         ))}
@@ -435,7 +432,7 @@ export function Resources() {
             {item.title}
             {item.inThisApp ? " · SITEWISE" : " · outside this app"}
           </strong>
-          <p>{item.body}</p>
+          <TeachText text={item.body} />
         </article>
       ))}
       <h3>Jurisdictions</h3>

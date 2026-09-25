@@ -28,6 +28,7 @@ import { SceneBoard, hintFor } from "./SceneBoard";
 import { SimLab } from "./SimLab";
 import { LadderSim } from "./LadderSim";
 import { Avatar } from "./Avatar";
+import { TeachText } from "./Parable";
 
 export function useFirstScore(onAnswer: (event: AnswerEvent) => void) {
   const seen = useRef(new Set<string>());
@@ -42,7 +43,7 @@ export function Feedback({ text, good, review }: { text: string; good?: boolean;
   return (
     <div className={good ? "feedback good" : "feedback bad"} role="status">
       <strong>{good ? "Good call." : "Not quite."}</strong>
-      <p>{text}</p>
+      <TeachText text={text} />
       {!good && (
         <>
           <p>
@@ -111,11 +112,11 @@ export function ChoiceSetView({
   return (
     <div className="stack">
       <h3>{title}</h3>
-      {intro && index === 0 && <p>{intro}</p>}
+      {intro && index === 0 && <TeachText text={intro} />}
       <p className="faint">
         {index + 1} of {items.length}
       </p>
-      <p>{item.prompt}</p>
+      <TeachText text={item.prompt} />
       <Options
         item={item}
         locked={good}
@@ -1128,7 +1129,7 @@ export function SdsView({
               <h3>
                 {section.num}. {section.title}
               </h3>
-              <p>{section.body}</p>
+              <TeachText text={section.body} />
             </>
           ) : (
             <p className="muted">Open a section. The sheet is fictional and marked for training.</p>
@@ -1195,7 +1196,7 @@ export function DialogueView({
   return (
     <div className="stack">
       <p className="kicker">{active.speaker}</p>
-      <p className="speech">{active.line}</p>
+      <TeachText text={active.line} />
       {active.choices.map((option) => (
         <button
           key={option.id}
@@ -1462,8 +1463,8 @@ export function ShiftView({
           const module = getModule(item.moduleId);
           return (
             <div key={item.id} className="panel stack">
-              <p>{item.prompt}</p>
-              <p>{item.review}</p>
+              <TeachText text={item.prompt} />
+              <TeachText text={item.review} />
               {module && <Link to={`/training/${module.id}`}>Review {module.title}</Link>}
             </div>
           );
@@ -1475,10 +1476,10 @@ export function ShiftView({
   return (
     <div className="stack">
       <h3>{block.title}</h3>
-      {index === 0 && <p>{block.intro}</p>}
+      {index === 0 && <TeachText text={block.intro} />}
       <p className="kicker">{beat.kicker}</p>
-      <p>{beat.prompt}</p>
-      <p className="muted">{beat.detail}</p>
+      <TeachText text={beat.prompt} />
+      <TeachText text={beat.detail} />
       {beat.options.map((option) => (
         <button
           key={option.id}

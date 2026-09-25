@@ -21,6 +21,7 @@ import {
 import { ExitBar } from "./ExitBar";
 import { RealityCheck } from "./RealityCheck";
 import { Feedback, BlockView } from "./activities";
+import { TeachText } from "./Parable";
 import { tradeCall } from "../content/tradeScenes";
 
 export function SourceList({ sources }: { sources: SourceRef[] }) {
@@ -54,8 +55,8 @@ function TradeLessonCall({ moduleId }: { moduleId: string }) {
   return (
     <article className="panel stack">
       <p className="kicker">{scene.speaker} · this call follows your trade</p>
-      <p>{scene.lesson}</p>
-      <p>{scene.line}</p>
+      <TeachText text={scene.lesson} />
+      <TeachText text={scene.line} />
       <p className="muted">A trade here changes the call. It does not certify the trade.</p>
       {scene.options.map((item) => (
         <button
@@ -88,21 +89,24 @@ function LessonView({ block, moduleId }: { block: LessonBlock; moduleId: string 
   return (
     <div className="stack">
       <h3>{block.title}</h3>
-      {scene && <p>{scene.lesson}</p>}
+      <p className="faint">Press a line. The yard shows that step.</p>
+      {scene && <TeachText text={scene.lesson} />}
       {block.paragraphs.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
+        <TeachText key={paragraph} text={paragraph} />
       ))}
       {block.bullets && (
-        <ul>
+        <ul className="teach-list">
           {block.bullets.map((bullet) => (
-            <li key={bullet}>{bullet}</li>
+            <li key={bullet}>
+              <TeachText text={bullet} />
+            </li>
           ))}
         </ul>
       )}
       {block.callout && (
         <div className="callout">
           <strong>{block.callout.title}</strong>
-          <p>{block.callout.body}</p>
+          <TeachText text={block.callout.body} />
         </div>
       )}
     </div>
@@ -294,19 +298,21 @@ export function ModulePlayer() {
       {cursor === 0 && (
         <div className="stack">
           <p>{roleLine(state.role)}</p>
-          <p>{module.description}</p>
+          <TeachText text={module.description} />
           <p className="muted">
             {module.estimatedMinutes} minutes · {module.difficulty} · +{module.completionXp} XP on completion
           </p>
           <h3>Learning objectives</h3>
-          <ul>
+          <ul className="teach-list">
             {module.objectives.map((objective) => (
-              <li key={objective}>{objective}</li>
+              <li key={objective}>
+                <TeachText text={objective} />
+              </li>
             ))}
           </ul>
           <blockquote className="speech">
             <p className="kicker">{beat.speaker}</p>
-            <p>{beat.text}</p>
+            <TeachText text={beat.text} />
           </blockquote>
           <p className="muted">This part is built as a short segment, about 3–7 minutes, then practice and a game.</p>
           <JurisdictionMark tag={module.jurisdiction} />

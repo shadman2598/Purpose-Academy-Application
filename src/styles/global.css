@@ -530,7 +530,35 @@ p { margin: 0; }
 .badge-card.locked { opacity: 0.55; }
 .score-line { display: grid; grid-template-columns: 180px 1fr 48px; gap: 8px; align-items: center; }
 
-.speech { border-left: 3px solid var(--info); padding-left: 12px; }
+.teach-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.teach-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-left: 3px solid var(--line);
+  border-radius: 0 12px 12px 0;
+  padding: 8px 12px;
+  color: inherit;
+  cursor: pointer;
+}
+.teach-line.on, .teach-line:hover { border-left-color: var(--amber); background: var(--wash); }
+.teach-line .kicker { flex: none; white-space: nowrap; }
+.parable {
+  margin: 8px 0 0;
+  padding: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.parable figcaption { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.parable-art { width: 100%; height: auto; display: block; border-radius: 12px; }
+.parable-spin { transform-box: fill-box; transform-origin: center; animation: parable-spin 0.7s linear infinite; }
+@keyframes parable-spin { to { transform: rotate(360deg); } }
 textarea, input[type="text"], select {
   width: 100%; background: var(--bg); border: 1px solid var(--line);
   border-radius: 10px; padding: 10px; min-height: 44px;

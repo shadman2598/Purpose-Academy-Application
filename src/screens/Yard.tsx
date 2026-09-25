@@ -4,6 +4,7 @@ import { Avatar } from "../components/Avatar";
 import { ExitBar } from "../components/ExitBar";
 import { Feedback } from "../components/activities";
 import { WalkGrid } from "../components/WalkGrid";
+import { TeachText } from "../components/Parable";
 import { areaSpeech, tradeRadio, tradeToolbox } from "../content/tradeScenes";
 import { SAFETY_CHECKS } from "../content/checks";
 import { continueAfter } from "../content/campaign";
@@ -52,7 +53,7 @@ export function SitePage() {
     <div className="stack">
       <p className="kicker">Northline yard</p>
       <h2>Walk the yard</h2>
-      <p>{tradeHint(state.trade)} You start at the site office. Walk to a neighbour. The crew talks only where you are standing.</p>
+      <TeachText text={`${tradeHint(state.trade)} You start at the site office. Walk to a neighbour. The crew talks only where you are standing.`} />
       <p className="muted">Walked {walked.length} of {SITE_AREAS.length}.</p>
       <WalkGrid
         cells={SITE_AREAS.map((item) => ({ id: item.id, label: AREA_MARK[item.id], col: item.col, row: item.row }))}
@@ -66,7 +67,7 @@ export function SitePage() {
       <article className="panel stack">
         <p className="kicker">{spot.npc}</p>
         <h3>{spot.name}</h3>
-        <p>{areaSpeech(spot.id, state.trade, spot.line)}</p>
+        <TeachText text={areaSpeech(spot.id, state.trade, spot.line)} />
         <Link className="btn btn-primary" to={spot.href}>
           {spot.action}
         </Link>
@@ -74,7 +75,7 @@ export function SitePage() {
       <article className="panel stack">
         <p className="kicker">Mission</p>
         <h3>Find 5 hazards before the crew starts work</h3>
-        <p>Damaged cord, blocked exit, missing eye protection, an unlabelled chemical, and a worker under a load.</p>
+        <TeachText text="Damaged cord, blocked exit, missing eye protection, an unlabelled chemical, and a worker under a load." />
         <Link className="btn btn-primary" to="/hunt">
           Start the hunt
         </Link>
@@ -188,14 +189,20 @@ export function LockerPage() {
       </div>
       <article className="panel stack">
         <h3>{item.name}</h3>
-        <p><strong>What is it?</strong> {item.what}</p>
-        <p><strong>When is it used?</strong> {item.when}</p>
-        <p><strong>What hazards does it address?</strong> {item.hazard}</p>
-        <p><strong>What should you inspect?</strong> {item.inspect}</p>
-        <p><strong>What training or authorization might be required?</strong> {item.authorization}</p>
-        <p><strong>What are its limitations?</strong> {item.limit}</p>
+        <p><strong>What is it?</strong></p>
+        <TeachText text={item.what} />
+        <p><strong>When is it used?</strong></p>
+        <TeachText text={item.when} />
+        <p><strong>What hazards does it address?</strong></p>
+        <TeachText text={item.hazard} />
+        <p><strong>What should you inspect?</strong></p>
+        <TeachText text={item.inspect} />
+        <p><strong>What training or authorization might be required?</strong></p>
+        <TeachText text={item.authorization} />
+        <p><strong>What are its limitations?</strong></p>
+        <TeachText text={item.limit} />
         <h3>Mini-check</h3>
-        <p>{item.check.prompt}</p>
+        <TeachText text={item.check.prompt} />
         <div className="row">
           <button
             type="button"
@@ -325,7 +332,7 @@ export function DecisionsPage() {
       </p>
       <blockquote className="speech">
         <p className="kicker">{scene.speaker}</p>
-        <p>{scene.line}</p>
+        <TeachText text={scene.line} />
       </blockquote>
       {scene.options.map((item) => (
         <button
@@ -372,7 +379,7 @@ export function RadioPage() {
       <p className="kicker">Site radio</p>
       <h2>{call.from} is calling</h2>
       <blockquote className="speech">
-        <p>{call.call}</p>
+        <TeachText text={call.call} />
       </blockquote>
       {call.options.map((item) => (
         <button
@@ -446,7 +453,7 @@ export function ToolboxPage() {
       {show && extras.length === 0 && missed.length === 0 && (
         <article className="panel stack">
           <h3>Briefing</h3>
-          <p>{scene.briefing}</p>
+          <TeachText text={scene.briefing} />
           <p className="muted">This talk is practice. The real briefing is the one your supervisor gives on that site.</p>
           <ExitBar continueHref="/decisions" continueLabel="Continue: What would you do?" />
         </article>
@@ -483,7 +490,7 @@ export function WhmisLabPage() {
       />
       <article className="panel stack">
         <p className="kicker">{stop.speaker} · {stop.label}</p>
-        <p>{stop.line}</p>
+        <TeachText text={stop.line} />
         {stop.options.map((item) => (
           <button
             key={item.id}
@@ -542,7 +549,7 @@ export function CheckPage() {
       <p className="kicker">30-second safety check</p>
       <h2>{left}s</h2>
       <p className="muted">The timer does not change the score.</p>
-      <p>{check.prompt}</p>
+      <TeachText text={check.prompt} />
       {check.options.map((option) => (
         <button
           key={option.id}
