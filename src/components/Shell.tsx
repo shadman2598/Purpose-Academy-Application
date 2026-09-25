@@ -1,5 +1,7 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { PRODUCT } from "../content/framework";
+import { WorksiteLoad } from "../screens/Gate";
 
 const DESKTOP = [
   ["Home", "/home"],
@@ -25,6 +27,21 @@ const MOBILE = [
 ] as const;
 
 export function Shell() {
+  const location = useLocation();
+  const [shownPath, setShownPath] = useState(location.pathname);
+  const [loading, setLoading] = useState(true);
+
+  if (location.pathname !== shownPath) {
+    setShownPath(location.pathname);
+    setLoading(true);
+  }
+
+  useEffect(() => {
+    const reduce = document.documentElement.dataset.motion === "reduce";
+    const timer = window.setTimeout(() => setLoading(false), reduce ? 500 : 1400);
+    return () => window.clearTimeout(timer);
+  }, [shownPath]);
+
   return (
     <div className="shell">
       <a className="skip" href="#main">
@@ -45,7 +62,13 @@ export function Shell() {
         <div className="sidebar-foot faint">Educational training. Not a certification.</div>
       </aside>
       <main id="main" className="content">
-        <Outlet />
+        {loading ? (
+          <div className="worksite-hold">
+            <WorksiteLoad />
+          </div>
+        ) : (
+          <Outlet />
+        )}
       </main>
       <nav className="bottom-nav" aria-label="Primary">
         {MOBILE.map(([label, to]) => (

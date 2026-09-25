@@ -5,33 +5,38 @@ import { TRADES, type Trade } from "../content/trades";
 import { XP_ROWS } from "../content/framework";
 import type { JurisdictionCode, Role } from "../content/model";
 import { useProgress } from "../state/progress";
+import { CrewSite } from "../components/CrewSite";
 
-export function LoadingScreen({ onDone }: { onDone: () => void }) {
+export function WorksiteLoad() {
   const [line, setLine] = useState(0);
   useEffect(() => {
-    const reduce = document.documentElement.dataset.motion === "reduce";
-    const total = reduce ? 900 : 1500;
     const spin = window.setInterval(() => setLine((value) => (value + 1) % LOADING_LINES.length), 380);
-    const done = window.setTimeout(onDone, total);
-    return () => {
-      window.clearInterval(spin);
-      window.clearTimeout(done);
-    };
+    return () => window.clearInterval(spin);
+  }, []);
+
+  return (
+    <div className="stack worksite-load">
+      <div className="wordmark lg">
+        <span className="mark" aria-hidden />
+        {PRODUCT.name}
+      </div>
+      <p>The crew is on the site...</p>
+      <CrewSite />
+      <p className="muted">{LOADING_LINES[line]}</p>
+    </div>
+  );
+}
+
+export function LoadingScreen({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const reduce = document.documentElement.dataset.motion === "reduce";
+    const done = window.setTimeout(onDone, reduce ? 900 : 1600);
+    return () => window.clearTimeout(done);
   }, [onDone]);
 
   return (
     <div className="boot">
-      <div className="stack" style={{ alignItems: "center" }}>
-        <div className="wordmark lg">
-          <span className="mark" aria-hidden />
-          {PRODUCT.name}
-        </div>
-        <p>Preparing your worksite...</p>
-        <div className="beam" aria-hidden>
-          <span />
-        </div>
-        <p className="muted">{LOADING_LINES[line]}</p>
-      </div>
+      <WorksiteLoad />
     </div>
   );
 }

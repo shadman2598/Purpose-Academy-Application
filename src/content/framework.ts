@@ -4,7 +4,7 @@ export { JURISDICTIONS, jurisdictionLabel, jurisdictionPickerDetail } from "./ju
 export const PRODUCT = {
   name: "SITEWISE",
   subtitle: "Learn the Site. Know the Hazards. Work Smart.",
-  line: "Canadian Construction Training",
+  line: "Purpose Academy Training",
 } as const;
 
 export const DISCLAIMER =
