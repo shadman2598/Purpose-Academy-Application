@@ -1,0 +1,251 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String              @id @default(cuid())
+  email        String              @unique
+  name         String
+  passwordHash String
+  role         String              @default("learner")
+  createdAt    DateTime            @default(now())
+  profile      Profile?
+  admin        AdminUser?
+  progress     Progress[]
+  answers      Answer[]
+  badges       UserBadge[]
+  achievements Achievement[]
+  certificates CertificateRecord[]
+  sessions     Session[]
+  audits       AuditLog[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Profile {
+  id           String @id @default(cuid())
+  userId       String @unique
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  crewRole     String @default("new")
+  jurisdiction String @default("ALBERTA")
+  displayName  String
+}
+
+model Jurisdiction {
+  id      String   @id
+  label   String
+  modules Module[]
+}
+
+model ContentVersion {
+  id          String   @id @default(cuid())
+  label       String
+  notes       String   @default("")
+  publishedAt DateTime @default(now())
+  modules     Module[]
+}
+
+model Source {
+  id             String  @id @default(cuid())
+  sourceTitle    String
+  organization   String
+  url            String
+  jurisdiction   String
+  lastReviewed   String
+  contentVersion String
+  moduleId       String?
+  module         Module? @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+}
+
+model Module {
+  id               String          @id
+  title            String
+  mapLabel         String
+  description      String
+  estimatedMinutes Int             @default(6)
+  difficulty       String          @default("Starter")
+  completionXp     Int             @default(500)
+  passingScore     Int             @default(70)
+  jurisdictionId   String
+  jurisdiction     Jurisdiction    @relation(fields: [jurisdictionId], references: [id])
+  published        Boolean         @default(true)
+  warnings         String          @default("")
+  versionId        String?
+  version          ContentVersion? @relation(fields: [versionId], references: [id])
+  createdInAdmin   Boolean         @default(false)
+  lessons          Lesson[]
+  activities       Activity[]
+  questions        Question[]
+  scenarios        Scenario[]
+  sources          Source[]
+  progress         Progress[]
+}
+
+model Lesson {
+  id             String @id @default(cuid())
+  moduleId       String
+  module         Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title          String
+  body           String
+  position       Int    @default(0)
+  minutes        Int    @default(5)
+  jurisdictionId String @default("CANADA")
+  published      Boolean @default(true)
+}
+
+model Activity {
+  id        String  @id @default(cuid())
+  moduleId  String
+  module    Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title     String
+  kind      String
+  position  Int     @default(0)
+  xp        Int     @default(100)
+  published Boolean @default(true)
+}
+
+model Question {
+  id         String   @id @default(cuid())
+  moduleId   String
+  module     Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  prompt     String
+  type       String
+  payload    String
+  difficulty Int      @default(1)
+  published  Boolean          @default(true)
+  position   Int              @default(0)
+  options    QuestionOption[]
+  answers    Answer[]
+}
+
+model QuestionOption {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  label      String
+  correct    Boolean  @default(false)
+  position   Int      @default(0)
+}
+
+model Scenario {
+  id        String  @id @default(cuid())
+  moduleId  String
+  module    Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  speaker   String
+  line      String
+  payload   String
+  published Boolean          @default(true)
+  choices   ScenarioChoice[]
+}
+
+model ScenarioChoice {
+  id         String   @id @default(cuid())
+  scenarioId String
+  scenario   Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  label      String
+  correct    Boolean
+  feedback   String
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  cursor    Int      @default(0)
+  completed Boolean  @default(false)
+  score     Int      @default(0)
+  seconds   Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, moduleId])
+}
+
+model Answer {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id])
+  moduleId   String
+  prompt     String
+  correct    Boolean
+  feedback   String    @default("")
+  dimension  String    @default("knowledge")
+  createdAt  DateTime  @default(now())
+
+  @@unique([userId, moduleId, prompt])
+}
+
+model Badge {
+  id     String      @id
+  name   String
+  detail String
+  users  UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+model Achievement {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key      String
+  label    String
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, key])
+}
+
+model CertificateRecord {
+  id           String   @id
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learnerName  String
+  course       String
+  modules      String
+  completedOn  String
+  score        Int
+  version      String
+  jurisdiction String
+  createdAt    DateTime @default(now())
+}
+
+model AdminUser {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title  String @default("Content admin")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String
+  actor     User     @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  action    String
+  target    String
+  detail    String   @default("")
+  createdAt DateTime @default(now())
+}

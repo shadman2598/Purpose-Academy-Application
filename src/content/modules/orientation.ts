@@ -1,0 +1,347 @@
+import type { TrainingModule } from "../model";
+import { SOURCES } from "../sources";
+
+export const orientation: TrainingModule = {
+  id: "orientation",
+  title: "First Day on Site",
+  mapLabel: "Site Orientation",
+  description: "Sign in, learn the yard, and find the places you will need before the work starts.",
+  estimatedMinutes: 15,
+  difficulty: "Starter",
+  completionXp: 500,
+  jurisdiction: "CANADA",
+  warnings: ["site-specific"],
+  objectives: [
+    "Sign in and stay inside the site’s access rules.",
+    "Name your supervisor and who you call with a question.",
+    "Find first aid, the exit, the extinguisher, and the muster point.",
+    "Recognize restricted areas, the PPE station, and basic housekeeping.",
+  ],
+  sources: [SOURCES.albertaOhs, SOURCES.hazardControl],
+  blocks: [
+    {
+      type: "lesson",
+      id: "orientation-learn",
+      phase: "learn",
+      xpKind: "lesson",
+      title: "You’ve arrived for your first shift",
+      paragraphs: [
+        "Northline Yard is fictional. The habit is not. On a real site you do not start work until the site has told you how to enter, who is in charge, and where to go if something goes wrong.",
+        "Signing in is how the site knows who is there. It matters for an emergency headcount. If a coworker says “skip the board, they know you,” you still sign in.",
+        "Learn the names that matter today: your supervisor, the first aid attendant if the site has one, and the muster point. Washrooms and the break area are part of the tour so you are not hunting for them later.",
+      ],
+      bullets: [
+        "Site access: use the gate you were shown. Do not cut a fence.",
+        "Site rules: they can be stricter than the general lesson you took online.",
+        "PPE: the yard will tell you what is required in each area. There is no single list for every task.",
+        "Housekeeping: clear walkways, coiled cords, and scrap in the bin. A trip hazard is a site problem, not a personality test.",
+        "Communication: if you did not hear the instruction, ask before you move.",
+      ],
+      callout: {
+        title: "This is not your site orientation",
+        body: "Employer and site orientation covers the real muster point, the real phone numbers, and the real rules. Use this module to practise the questions you should ask on day one.",
+      },
+    },
+    {
+      type: "lesson",
+      id: "orientation-alberta",
+      phase: "learn",
+      xpKind: "lesson",
+      countsForXp: false,
+      jurisdiction: "ALBERTA",
+      title: "Alberta duties, in short",
+      paragraphs: [
+        "Alberta’s OHS Act sets duties for employers, supervisors, and workers, including the right to refuse dangerous work. The exact words are in the Act. This module does not replace your employer’s orientation.",
+      ],
+    },
+    {
+      type: "lesson",
+      id: "orientation-west",
+      phase: "learn",
+      xpKind: "lesson",
+      countsForXp: false,
+      jurisdiction: ["ALBERTA", "BRITISH_COLUMBIA"],
+      title: "Two provinces, two statutes",
+      paragraphs: [
+        "Alberta and British Columbia each write their own occupational health and safety rules. This lesson does not quote either statute.",
+        "Use the current text from your province’s regulator, and the orientation for the site you are actually on.",
+      ],
+    },
+    {
+      type: "choice-set",
+      id: "orientation-practice",
+      phase: "practice",
+      xpKind: "practice",
+      title: "Before you walk in",
+      intro: "Three calls from the gate. Pick the one you would actually make.",
+      items: [
+        {
+          id: "sign-in",
+          prompt: "A coworker waves you through. “They know your name. Skip the board.”",
+          dimension: "procedure",
+          options: [
+            {
+              id: "skip",
+              label: "Skip it. You don’t want to look slow.",
+              correct: false,
+              feedback: "The board is how the site counts people if the alarm goes. Looking quick is not the job.",
+            },
+            {
+              id: "sign",
+              label: "Sign in, then ask where your supervisor is.",
+              correct: true,
+              feedback: "Sign in first. Then find the person who is responsible for you today.",
+            },
+            {
+              id: "later",
+              label: "Start working and sign in at coffee.",
+              correct: false,
+              feedback: "If something happens before coffee, the site’s list is already wrong.",
+            },
+          ],
+        },
+        {
+          id: "green-cross",
+          prompt: "You see a green cross on a door near the office. What is that most likely marking?",
+          dimension: "knowledge",
+          options: [
+            {
+              id: "aid",
+              label: "First aid",
+              correct: true,
+              feedback: "A green cross is a common first-aid mark. Still confirm it on the site tour. Symbols are not the same on every yard.",
+            },
+            {
+              id: "lunch",
+              label: "The lunch room",
+              correct: false,
+              feedback: "Lunch rooms are usually signed as such. A green cross is the first-aid cue to confirm.",
+            },
+            {
+              id: "tools",
+              label: "The tool crib",
+              correct: false,
+              feedback: "Tool storage is marked differently. Don’t guess when you need first aid.",
+            },
+          ],
+        },
+        {
+          id: "housekeeping",
+          prompt: "Offcuts are scattered across the only walkway to the exit.",
+          dimension: "hazard",
+          options: [
+            {
+              id: "step",
+              label: "Step through them. Housekeeping is another trade’s job.",
+              correct: false,
+              feedback: "A blocked exit is everyone’s problem. You may not be the person who cleans the whole yard, but you don’t ignore the path out.",
+            },
+            {
+              id: "tell",
+              label: "Clear what you safely can, and tell your supervisor the exit was blocked.",
+              correct: true,
+              feedback: "If you can move the scrap without creating a new hazard, do that and report it. The exit has to stay usable.",
+            },
+            {
+              id: "hide",
+              label: "Kick it against the wall and say nothing.",
+              correct: false,
+              feedback: "Hiding scrap moves the trip hazard. It does not fix the walkway.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "locate",
+      id: "orientation-map",
+      phase: "play",
+      xpKind: "game",
+      title: "Find your way",
+      intro:
+        "This is a simplified Northline yard. Locate each place. A wrong tap tells you what you actually hit.",
+      scene: "gate",
+      targets: [
+        {
+          id: "aid",
+          kind: "cross",
+          x: 22,
+          y: 58,
+          label: "First aid",
+          feedback: "First aid. Know it before you need it, and know who the attendant is if the site has named one.",
+        },
+        {
+          id: "exit",
+          kind: "exit",
+          x: 78,
+          y: 34,
+          label: "Emergency exit",
+          feedback: "The signed exit. Your real route is the one on this site’s plan, not the one you used on the last job.",
+        },
+        {
+          id: "extinguisher",
+          kind: "extinguisher",
+          x: 63,
+          y: 50,
+          label: "Fire extinguisher",
+          feedback: "Extinguisher. Keep it visible. Scrap piled in front of it is a hazard of its own.",
+        },
+        {
+          id: "muster",
+          kind: "muster",
+          x: 86,
+          y: 76,
+          label: "Muster point",
+          feedback: "Muster point. You go here on an alarm and you stay until someone accounts for you.",
+        },
+        {
+          id: "supervisor",
+          kind: "office",
+          x: 34,
+          y: 30,
+          label: "Supervisor",
+          feedback: "Supervisor’s office. This is who you ask when the instruction was unclear.",
+        },
+        {
+          id: "ppe",
+          kind: "board",
+          x: 48,
+          y: 72,
+          label: "PPE station",
+          feedback: "PPE station. Gear for the yard is checked here. Task-specific gear still depends on the work.",
+        },
+        {
+          id: "restricted",
+          kind: "restricted",
+          x: 70,
+          y: 64,
+          label: "Restricted area",
+          feedback: "Restricted area. The sign is the instruction. You don’t enter because the gate was open.",
+        },
+      ],
+      decoys: [
+        {
+          id: "washroom",
+          kind: "washroom",
+          x: 40,
+          y: 44,
+          label: "Washroom",
+          feedback: "That’s the washroom. Useful, and not the place this prompt is asking for.",
+        },
+        {
+          id: "lunch",
+          kind: "lunch",
+          x: 16,
+          y: 78,
+          label: "Break area",
+          feedback: "That’s the break area. Know it, and don’t treat it as the muster point.",
+        },
+      ],
+    },
+    {
+      type: "choice-set",
+      id: "orientation-check",
+      phase: "test",
+      xpKind: "check",
+      title: "Knowledge check",
+      intro: "Short check. Your first answer is the one that counts.",
+      items: [
+        {
+          id: "muster-why",
+          prompt: "Why does the site want you at the muster point during an alarm?",
+          dimension: "knowledge",
+          options: [
+            {
+              id: "count",
+              label: "So the crew can be accounted for.",
+              correct: true,
+              feedback: "Headcount is the point. Wandering to your car can make people search for you.",
+            },
+            {
+              id: "tools",
+              label: "So you can grab tools on the way out.",
+              correct: false,
+              feedback: "You leave. You don’t run back for tools.",
+            },
+            {
+              id: "photo",
+              label: "So someone can photograph the crew.",
+              correct: false,
+              feedback: "The muster point is for accounting for people, not for photos.",
+            },
+          ],
+        },
+        {
+          id: "restricted-open",
+          prompt: "The restricted-area gate is unlatched and nobody is standing there.",
+          dimension: "decision",
+          options: [
+            {
+              id: "enter",
+              label: "Go in. An open gate means it’s fine.",
+              correct: false,
+              feedback: "An open gate is not permission. It may be a mistake.",
+            },
+            {
+              id: "stay",
+              label: "Stay out and tell your supervisor the gate is unlatched.",
+              correct: true,
+              feedback: "Stay out. Report the open gate. Restricted means you need authority to enter.",
+            },
+            {
+              id: "close",
+              label: "Close it quietly and don’t mention it.",
+              correct: false,
+              feedback: "Closing it can help, and silence does not. Someone may be inside, or the area may be unsafe.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "choice-set",
+      id: "orientation-challenge",
+      phase: "test",
+      xpKind: "challenge",
+      title: "Final challenge — the board",
+      intro: "Your first answer counts. You can read the explanation after you choose.",
+      items: [
+        {
+          id: "challenge-board",
+          prompt:
+            "It’s 6:55. The sign-in line is slow. Your ride is leaving the passenger lane, and a lead hand says, “I’ll tell them you were here. Get to the slab.”",
+          dimension: "decision",
+          track: "challenge",
+          options: [
+            {
+              id: "go",
+              label: "Go to the slab. The lead hand’s word is enough.",
+              correct: false,
+              feedback:
+                "A verbal promise does not put you on the emergency list. Sign in, then go to the slab.",
+            },
+            {
+              id: "sign",
+              label: "Sign in, even if you are a minute behind the crew, then report to the slab.",
+              correct: true,
+              feedback:
+                "The list is part of site access. A minute at the board is the procedure. Tell the lead hand you signed in.",
+            },
+            {
+              id: "photo",
+              label: "Text a photo of the yard to the office and head in.",
+              correct: false,
+              feedback: "A text is not the site’s sign-in process.",
+            },
+            {
+              id: "wait",
+              label: "Leave the site and come back tomorrow.",
+              correct: false,
+              feedback: "You don’t have to abandon the shift. You do have to sign in before you work.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
